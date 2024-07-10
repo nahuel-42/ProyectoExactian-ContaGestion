@@ -14,17 +14,4 @@ public class SpringContaGestionApp {
 	}
 	
 	
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173") // Ajusta esto según sea necesario
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
-                .allowedHeaders("*") // Permite todos los encabezados
-                .allowCredentials(true);
-			}
-		};
-	}
 }

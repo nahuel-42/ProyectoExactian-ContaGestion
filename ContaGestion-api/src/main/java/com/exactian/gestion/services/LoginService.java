@@ -1,6 +1,7 @@
 package com.exactian.gestion.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.exactian.gestion.dto.AuthResponseDTO;
 import com.exactian.gestion.dto.LoginRequestDTO;
 import com.exactian.gestion.dto.RegistroRequestDTO;
 import com.exactian.gestion.model.Empleado;
+import com.exactian.gestion.model.EstadoEmpleado;
 import com.exactian.gestion.model.Rol;
 import com.exactian.gestion.model.Usuario;
 import com.exactian.gestion.repositories.EmpleadoRepository;
@@ -51,18 +53,24 @@ public class LoginService {
     public AuthResponseDTO register(RegistroRequestDTO request) {
         Rol rol = rolRepository.findByNombre("USER").orElse(null);
     	
+        EstadoEmpleado estado = new EstadoEmpleado();
+        estado.setDentro_compania(false);
+        estado.setHola_ult_ingreso(new Date());
+        
         Empleado empleado = new Empleado();
         empleado.setNombre(request.getNombre());
         empleado.setApellido(request.getApellido());   
         empleado.setEmail(request.getEmail());
         empleado = empleadoRepository.save(empleado); 
-
+        empleado.setEstado(estado);
+        
         Usuario usuario = new Usuario();
         usuario.setusername(request.getNombre_usuario());
         usuario.setContrasena(passwordEncoder.encode(request.getContrasenia()));
         usuario.setEmpleado(empleado);
         usuario.setRoles(rol);
-        
+ 
+    
         usuarioRepository.save(usuario);
         String token=jwtService.getToken(usuario);
         return new AuthResponseDTO(token);

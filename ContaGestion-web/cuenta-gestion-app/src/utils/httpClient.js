@@ -8,21 +8,28 @@ let headers = {
     Pragma: "no-cache"
 };
 
-const filterOptions = ({method, ...rest}) => rest;
+
+const filterOptions = ({ method, ...rest }) => rest;
 
 const fetch = async (url, options = {}) => {
     try {
+        const token = localStorage.getItem('jwtToken');
+
         const instance = axios.create({
             baseURL: `http://localhost:8080/api`
         });
 
         // INTERCEPTOR REQUEST
         instance.interceptors.request.use(
-            (conf) => {
-                //console.log('1 Interceptor request conf: ', conf);
-                return conf;
+            config => {
+                // Si existe un token, lo agrega al encabezado de Authorization
+                console.log('token  ',token);
+                if (token) {
+                    config.headers['Authorization'] = `Bearer ${token}`;
+                }
+                return config;
             },
-            (error) => {
+            error => {
                 return Promise.reject(error);
             }
         );
@@ -30,7 +37,7 @@ const fetch = async (url, options = {}) => {
         // INTERCEPTOR RESPONSE
         instance.interceptors.response.use(
             (response) => {
-                //console.log('Interceptor response: ', response);
+                console.log('Interceptor response: ', response);
                 return response;
             },
             (error) => {
@@ -39,12 +46,12 @@ const fetch = async (url, options = {}) => {
             }
         );
 
-        const {data} = await instance.request({
+        const { data } = await instance.request({
             url,
             data: options["data"],
             params: options["params"],
             method: options["method"],
-            headers: {...headers, ...options["headers"]},
+            headers: { ...headers, ...options["headers"] },
             cancelToken: options["cancelFn"]
                 ? new axios.CancelToken(options["cancelFn"])
                 : null

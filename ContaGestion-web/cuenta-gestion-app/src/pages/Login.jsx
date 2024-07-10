@@ -8,7 +8,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-
+    var token;
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
     };
@@ -19,13 +19,16 @@ function Login() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        localStorage.removeItem('jwtToken');
         try {
             const body = {
                 nombre_de_usuario: username,
                 contrasenia: password,
             };
             const response = await httpClient.post('/auth/login', { data: body });
-            console.log('Respuesta del servidor:', response.data);
+            
+            token = response.token;
+            localStorage.setItem('jwtToken', token);
             navigate('/UsuarioDashboard'); 
         } catch (error) {
             const errorMsg = error.response ? error.response.data : error.message;
