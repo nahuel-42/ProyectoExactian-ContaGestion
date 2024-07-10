@@ -2,6 +2,7 @@ package com.exactian.gestion.model;
 
 import java.util.List;
 
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,25 +18,27 @@ public class Rol {
 	private String nombre;
 
     @Column()
-    private String apellido;
+    private String descripcion;
 
-    @ManyToMany
-    @JoinTable(name = "Usuarios_tienen_rol",
-               joinColumns = @JoinColumn(name = "id_rol"),
-               inverseJoinColumns = @JoinColumn(name = "id_usuario"))
-    private List <Usuario> usuarios;
+    @OneToOne (mappedBy = "roles", cascade = CascadeType.ALL)
+	private Usuario usuario;
     
     
-	public Rol(Long id_rol, String nombre, String apellido) {
+	public Rol(Long id_rol, String nombre, String descripcion) {
 		super();
 		this.id_rol = id_rol;
 		this.nombre = nombre;
-		this.apellido = apellido;
+		this.descripcion = descripcion;
 	}
     
 	public Rol() {
 	}
 
+	public Rol(String nombre, String descripcion) {
+	    this.nombre = nombre;
+	    this.descripcion = descripcion;
+	}
+	
 	public Long getId_rol() {
 		return id_rol;
 	}
@@ -52,12 +55,12 @@ public class Rol {
 		this.nombre = nombre;
 	}
 
-	public String getApellido() {
-		return apellido;
+	public String getdescripcion() {
+		return descripcion;
 	}
 
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
+	public void setdescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
     
 	
