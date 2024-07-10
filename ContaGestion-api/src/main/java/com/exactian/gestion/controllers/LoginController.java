@@ -14,13 +14,13 @@ import com.exactian.gestion.dto.RegistroRequestDTO;
 import com.exactian.gestion.services.LoginService;
 
 @RestController 
-@CrossOrigin
 @RequestMapping("api/auth") 
+@CrossOrigin(origins = "http://localhost:8080")
 public class LoginController{
 
 	@Autowired
 	private LoginService loginService;
-	
+
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO request)
     {
