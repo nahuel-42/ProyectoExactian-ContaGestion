@@ -1,8 +1,9 @@
 import React from 'react';
 
-function BotonDashboard({ onClick, texto  }) {
+
+function BotonDashboard({ onClick, texto, type }) {
   return (
-    <button type="button" className="boton_dashboard" onClick={onClick}>
+    <button type= {type} className="boton_dashboard" onClick={onClick}>
         {texto}
     </button>
   );

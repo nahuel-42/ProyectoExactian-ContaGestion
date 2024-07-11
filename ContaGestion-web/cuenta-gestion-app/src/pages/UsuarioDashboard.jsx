@@ -55,7 +55,7 @@ const UsuarioDashboard = () => {
         sethoraInicial(`${("0" + ahora.getHours()).slice(-2)}:${("0" + ahora.getMinutes()).slice(-2)}`);
     };
 
-    
+
     const handleDateChange = (event) => {
         setfechaInicial(event.target.value);
     };
@@ -73,6 +73,7 @@ const UsuarioDashboard = () => {
     const registrarIngreso = async (event) => {
         event.preventDefault();
         setErrorMessage('');
+        setMostrarHoraTranscurrida(false);
         try {
             const fechaHora = `${fechaInicial}T${horaInicial}:00`;
             console.log('Fecha y hora:', fechaHora);
@@ -126,9 +127,11 @@ const UsuarioDashboard = () => {
 
     return (
 
-
         <div className="dashboard_container">
 
+            <div className="titulo_principal">
+                <h1>Registrar ingresos y egresos</h1>
+            </div>
             <div className='dashboard_containerimput'>
                 <label htmlFor="opciones">Opciones:</label>
                 <select className='select_empleados' id="opciones" name="opciones" value={idEmpleado}
