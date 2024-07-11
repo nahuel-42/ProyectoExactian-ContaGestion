@@ -17,7 +17,7 @@ public class EmpleadoMapper {
 	        if ( entity == null ) {
 	            return null;
 	        }
-
+	        entity.setAcceso(null);
 	        EmpleadoDTO empleadoDTO = new EmpleadoDTO();
 	        empleadoDTO.setAcceso( entity.getAcceso() );
 	        empleadoDTO.setApellido(entity.getApellido());

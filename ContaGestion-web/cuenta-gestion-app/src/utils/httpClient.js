@@ -23,7 +23,7 @@ const fetch = async (url, options = {}) => {
         instance.interceptors.request.use(
             config => {
                 // Si existe un token, lo agrega al encabezado de Authorization
-                console.log('token  ',token);
+                // console.log('token  ',token);
                 if (token) {
                     config.headers['Authorization'] = `Bearer ${token}`;
                 }
@@ -37,7 +37,7 @@ const fetch = async (url, options = {}) => {
         // INTERCEPTOR RESPONSE
         instance.interceptors.response.use(
             (response) => {
-                console.log('Interceptor response: ', response);
+                // console.log('Interceptor response: ', response);
                 return response;
             },
             (error) => {

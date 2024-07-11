@@ -76,3 +76,32 @@ button:hover {
     padding: 10px;
     min-width: 300px;
 }
+
+.select_empleados{
+    padding: 10px;
+    width: 100%;
+    min-width: 300px;
+}
+
+.boton_dashboard {
+    padding: 0.7em;
+    color: #fff;
+    background-color: #00a13688;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0px 20px 0px 20px;
+    font-size: 1em;
+}
+
+.horas_transcurridas{
+    padding: 0%;
+    margin: 0%;
+    text-align: center;
+    font-size: 1.3rem;
+
+}
+
+.borde_negro{
+    border: 1px solid black;
+}

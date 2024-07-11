@@ -1,5 +1,8 @@
 package com.exactian.gestion.services;
 
+
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,7 +10,9 @@ import com.exactian.gestion.dto.AsistenciaRequestDTO;
 import com.exactian.gestion.dto.EgresoResponseDTO;
 import com.exactian.gestion.dto.ResponseDTO;
 import com.exactian.gestion.enums.MensajesRespuesta;
+import com.exactian.gestion.model.Acceso;
 import com.exactian.gestion.model.Empleado;
+import com.exactian.gestion.repositories.AccesoRepository;
 import com.exactian.gestion.repositories.EmpleadoRepository;
 
 @Service
@@ -15,6 +20,8 @@ public class AsistenciaService {
 
 	@Autowired
 	private EmpleadoRepository empleadoRepository;
+	@Autowired
+	private AccesoRepository accesoRepository;
 	
 	
 	public ResponseDTO registrarIngreso(AsistenciaRequestDTO request) {
@@ -33,7 +40,14 @@ public class AsistenciaService {
 
 		empleado.getEstado().setDentro_compania(true);
 		empleado.getEstado().setHora_ult_ingreso(request.getFecha());
-		empleadoRepository.save(empleado);
+		empleado = empleadoRepository.save(empleado);
+
+		Acceso acceso = new Acceso();
+        acceso.setEmpleado(empleado); 
+        acceso.setHora_acceso(new Date()); 
+        acceso.setTipo_ingreso("INGRESO"); 
+        acceso.setHora_registro(request.getFecha());
+        accesoRepository.save(acceso);
 
 		return new  ResponseDTO(true, MensajesRespuesta.INGRESO_REGISTRADO_CORRECTAMENTE.toString());
 	}
@@ -56,6 +70,13 @@ public class AsistenciaService {
 		empleado.getEstado().setDentro_compania(false);
 		empleado.getEstado().setHora_ult_egreso(request.getFecha());
 		empleadoRepository.save(empleado);
+
+		Acceso acceso = new Acceso();
+        acceso.setEmpleado(empleado); 
+        acceso.setHora_acceso(new Date()); 
+        acceso.setTipo_ingreso("EGRESO"); 
+        acceso.setHora_registro(request.getFecha());
+        accesoRepository.save(acceso);
 
 		long diferencia = empleado.getEstado().getHora_ult_egreso().getTime() - empleado.getEstado().getHora_ult_ingreso().getTime();
 		
