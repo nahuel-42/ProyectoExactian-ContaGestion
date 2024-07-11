@@ -24,16 +24,20 @@ public class EstadoEmpleado {
 	private Date hora_ult_ingreso;
 	
 
+	private Date hora_ult_egreso;
+	
 	@Column(nullable = false) 
 	private boolean dentro_compania;
 
 	@OneToOne(mappedBy = "estado", cascade = CascadeType.ALL)
     private Empleado empleado;
 
-	public EstadoEmpleado(Long id_estado, Date hola_ult_ingreso, boolean dentro_compania, Empleado empleado) {
+	public EstadoEmpleado(Long id_estado, Date hora_ult_ingreso, Date hora_ult_egreso, boolean dentro_compania,
+			Empleado empleado) {
 		super();
 		this.id_estado = id_estado;
-		this.hora_ult_ingreso = hola_ult_ingreso;
+		this.hora_ult_ingreso = hora_ult_ingreso;
+		this.hora_ult_egreso = hora_ult_egreso;
 		this.dentro_compania = dentro_compania;
 		this.empleado = empleado;
 	}
@@ -50,13 +54,6 @@ public class EstadoEmpleado {
 		this.id_estado = id_estado;
 	}
 
-	public Date getHola_ult_ingreso() {
-		return hora_ult_ingreso;
-	}
-
-	public void setHola_ult_ingreso(Date hola_ult_ingreso) {
-		this.hora_ult_ingreso = hola_ult_ingreso;
-	}
 
 	public boolean isDentro_compania() {
 		return dentro_compania;
@@ -74,6 +71,23 @@ public class EstadoEmpleado {
 		this.empleado = empleado;
 	}
 
+	public Date getHora_ult_ingreso() {
+		return hora_ult_ingreso;
+	}
+
+	public void setHora_ult_ingreso(Date hora_ult_ingreso) {
+		this.hora_ult_ingreso = hora_ult_ingreso;
+	}
+
+	public Date getHora_ult_egreso() {
+		return hora_ult_egreso;
+	}
+
+	public void setHora_ult_egreso(Date hora_ult_egreso) {
+		this.hora_ult_egreso = hora_ult_egreso;
+	}
+
+	
 	
 	
 }

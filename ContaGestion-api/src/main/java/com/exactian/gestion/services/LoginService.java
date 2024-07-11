@@ -55,7 +55,7 @@ public class LoginService {
     	
         EstadoEmpleado estado = new EstadoEmpleado();
         estado.setDentro_compania(false);
-        estado.setHola_ult_ingreso(new Date());
+        estado.setHora_ult_ingreso(new Date());
         
         Empleado empleado = new Empleado();
         empleado.setNombre(request.getNombre());

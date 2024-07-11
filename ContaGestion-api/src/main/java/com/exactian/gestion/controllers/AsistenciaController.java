@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.exactian.gestion.dto.AsistenciaRequestDTO;
+import com.exactian.gestion.dto.EgresoResponseDTO;
 import com.exactian.gestion.dto.ResponseDTO;
 import com.exactian.gestion.enums.TipoAsistencia;
 import com.exactian.gestion.services.AsistenciaService;
@@ -36,7 +37,7 @@ public class AsistenciaController {
     }
 
     @PostMapping("/registrarEgreso")
-    public ResponseEntity<ResponseDTO> registrarEgreso(@RequestBody AsistenciaRequestDTO request, Authentication authentication) {
+    public ResponseEntity<EgresoResponseDTO> registrarEgreso(@RequestBody AsistenciaRequestDTO request, Authentication authentication) {
         String nombreDeUsuario = authentication.getName();
 
         request.setTipo(TipoAsistencia.Ingreso);

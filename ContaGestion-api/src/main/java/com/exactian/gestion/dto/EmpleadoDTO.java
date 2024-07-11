@@ -1,16 +1,14 @@
 package com.exactian.gestion.dto;
 
+import java.util.Date;
 import java.util.List;
 
 import com.exactian.gestion.model.Acceso;
 import com.exactian.gestion.model.EstadoEmpleado;
-import com.exactian.gestion.model.Usuario;
 
 
 
 public class EmpleadoDTO {
-
-public class Empleado {
 
 	private Long id_empleado;
     
@@ -18,24 +16,25 @@ public class Empleado {
 	private String nombre;
 	private String apellido;
 	private String email;
-	private EstadoEmpleado estado;
-	private Usuario usuario;
+	private EstadoEmpleadoDTO estado;
 	List<Acceso> acceso;
+	private Date hora_ult_egreso;
+	
+	
 
-	public Empleado(Long id_empleado, String nombre, String apellido, String email, EstadoEmpleado estado,
-			Usuario usuario, List<Acceso> acceso) {
+	public EmpleadoDTO(Long id_empleado, String nombre, String apellido, String email, EstadoEmpleadoDTO estado,
+			List<Acceso> acceso, Date hora_ult_egreso) {
 		super();
 		this.id_empleado = id_empleado;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.email = email;
 		this.estado = estado;
-		this.usuario = usuario;
 		this.acceso = acceso;
+		this.hora_ult_egreso = hora_ult_egreso;
 	}
 
-
-	public Empleado() {
+	public EmpleadoDTO() {
 		super();
 	}
 
@@ -71,20 +70,12 @@ public class Empleado {
 		this.email = email;
 	}
 
-	public EstadoEmpleado getEstado() {
+	public EstadoEmpleadoDTO getEstado() {
 		return estado;
 	}
 
-	public void setEstado(EstadoEmpleado estado) {
+	public void setEstado(EstadoEmpleadoDTO estado) {
 		this.estado = estado;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 	public List<Acceso> getAcceso() {
@@ -94,10 +85,17 @@ public class Empleado {
 	public void setAcceso(List<Acceso> acceso) {
 		this.acceso = acceso;
 	}
+
+	public Date getHora_ult_egreso() {
+		return hora_ult_egreso;
+	}
+
+	public void setHora_ult_egreso(Date hora_ult_egreso) {
+		this.hora_ult_egreso = hora_ult_egreso;
+	}
 	
 
 
     
-}
 
 }

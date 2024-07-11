@@ -4,71 +4,75 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.exactian.gestion.dto.AsistenciaRequestDTO;
-import com.exactian.gestion.dto.AsistenciaResponseDTO;
+import com.exactian.gestion.dto.EgresoResponseDTO;
 import com.exactian.gestion.dto.ResponseDTO;
 import com.exactian.gestion.enums.MensajesRespuesta;
-import com.exactian.gestion.model.Usuario;
-import com.exactian.gestion.repositories.UsuarioRepository;
+import com.exactian.gestion.model.Empleado;
+import com.exactian.gestion.repositories.EmpleadoRepository;
 
 @Service
 public class AsistenciaService {
 
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private EmpleadoRepository empleadoRepository;
 	
 	
 	public ResponseDTO registrarIngreso(AsistenciaRequestDTO request) {
 
-		Usuario usuario = usuarioRepository.findByUsername(request.getNombreDeUsuario()).orElse(null);
+		Empleado empleado = empleadoRepository.findById(request.getIdEmpleado()).orElse(null);
 
-		ResponseDTO response = validarUsuarioYEstado(usuario);
+		ResponseDTO response = validarEmpleadoYEstado(empleado);
 	    
 		if (!response.isSuccess()){
 			return response;
 		}
 
-		else if (usuario.getEmpleado().getEstado().isDentro_compania()) {
+		else if (empleado.getEstado().isDentro_compania()) {
 			return new ResponseDTO(false, MensajesRespuesta.EMPLEADO_YA_ESTA_DENTRO.toString());
 		}
 
-		usuario.getEmpleado().getEstado().setDentro_compania(true);
-		usuario.getEmpleado().getEstado().setHola_ult_ingreso(request.getFecha());
-		usuarioRepository.save(usuario);
+		empleado.getEstado().setDentro_compania(true);
+		empleado.getEstado().setHora_ult_ingreso(request.getFecha());
+		empleadoRepository.save(empleado);
 
 		return new  ResponseDTO(true, MensajesRespuesta.INGRESO_REGISTRADO_CORRECTAMENTE.toString());
 	}
 
-	public ResponseDTO registrarEgreso(AsistenciaRequestDTO request) {
+	public EgresoResponseDTO registrarEgreso(AsistenciaRequestDTO request) {
 
-		Usuario usuario = usuarioRepository.findByUsername(request.getNombreDeUsuario()).orElse(null);
+		Empleado empleado = empleadoRepository.findById(request.getIdEmpleado()).orElse(null);
 
-		ResponseDTO response = validarUsuarioYEstado(usuario);
+		/*
+		EgresoResponseDTO response = validarempleadoYEstado(empleado);
     
 		if (!response.isSuccess()){
 			return response;
 		}
-
-		if (!usuario.getEmpleado().getEstado().isDentro_compania()) {
-			return new ResponseDTO(false, MensajesRespuesta.EMPLEADO_NO_ESTA_DENTRO.toString());
+*/
+		if (!empleado.getEstado().isDentro_compania()) {
+			return new EgresoResponseDTO(false, MensajesRespuesta.EMPLEADO_NO_ESTA_DENTRO.toString(),null);
 		}
 		
-		usuario.getEmpleado().getEstado().setDentro_compania(false);
-		usuario.getEmpleado().getEstado().setHola_ult_ingreso(request.getFecha());
-		usuarioRepository.save(usuario);
+		empleado.getEstado().setDentro_compania(false);
+		empleado.getEstado().setHora_ult_egreso(request.getFecha());
+		empleadoRepository.save(empleado);
 
-		return new ResponseDTO(true, MensajesRespuesta.EGRESO_REGISTRADO_CORRECTAMENTE.toString());
+		long diferencia = empleado.getEstado().getHora_ult_egreso().getTime() - empleado.getEstado().getHora_ult_ingreso().getTime();
+		
+		return new EgresoResponseDTO(true, MensajesRespuesta.EGRESO_REGISTRADO_CORRECTAMENTE.toString(), diferencia);
 	}
 
 
 
-	private ResponseDTO validarUsuarioYEstado(Usuario usuario) {
-		if (usuario == null) {
+	private ResponseDTO validarEmpleadoYEstado(Empleado empleado) {
+		/*
+		if (empleado == null) {
 			return new ResponseDTO(false, MensajesRespuesta.USUARIO_NO_ENCONTRADO.toString());
-		} else if (usuario.getEmpleado() == null) {
+		} else if (empleado.getEmpleado() == null) {
 			return new ResponseDTO(false, MensajesRespuesta.USUARIO_NO_TIENE_EMPLEADO.toString());
-		} else if (usuario.getEmpleado().getEstado() == null) {
+		} else if (empleado.getEmpleado().getEstado() == null) {
 			return new ResponseDTO(false, MensajesRespuesta.EMPLEADO_NO_TIENE_ESTADO.toString());
-		} 
+		} */
 		return new ResponseDTO(true, null);
 	}
 }
