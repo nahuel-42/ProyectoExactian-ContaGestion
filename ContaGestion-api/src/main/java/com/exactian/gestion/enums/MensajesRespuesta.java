@@ -10,8 +10,8 @@ public enum MensajesRespuesta {
     EMPLEADO_NO_TIENE_ESTADO("El empleado no tiene un estado asociado."),
     EMPLEADO_NO_ESTA_DENTRO("El empleado no se encuentra dentro de la compañía."),
     EMPLEADO_YA_ESTA_DENTRO("El empleado ya se encuentra dentro de la compañía."),
-	HORA_EGRESO_MENOR("La fecha de ingreso indicada es anterior a la fecha de ingreso"),
-	HORA_EGRESO_IGUAL("La fecha de ingreso indicada es igual a la fecha de ingreso");
+	HORA_EGRESO_MENOR("La fecha de egreso indicada es anterior a la fecha de ingreso"),
+	HORA_EGRESO_IGUAL("La fecha de egreso indicada es igual a la fecha de ingreso");
     private final String message;
 
     MensajesRespuesta(String message) {

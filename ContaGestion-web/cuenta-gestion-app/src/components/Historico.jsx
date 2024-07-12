@@ -8,9 +8,8 @@ const Historico = ({ datosHistorico }) => {
     }
     datosHistorico = datosHistorico.slice(-5);
     datosHistorico.reverse();
-    //Los ultimos 5 registros
     return (
-        <div>
+        <div className="historico">
             <h2>Histórico general</h2>
             <ul>
                 {datosHistorico.map((registro, index) => (

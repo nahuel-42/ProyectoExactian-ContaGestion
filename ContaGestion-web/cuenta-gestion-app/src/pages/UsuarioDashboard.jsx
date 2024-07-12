@@ -151,7 +151,7 @@ const UsuarioDashboard = () => {
         <div className="dashboard_container">
 
             <div className="titulo_principal">
-                <h1>Registrar ingresos y egresos</h1>
+                <h1 id= "titulo_UsuarioDashboard">Registrar ingresos y egresos</h1>
             </div>
             <div className='dashboard_containerimput'>
                 <label htmlFor="opciones">Opciones:</label>
@@ -202,7 +202,7 @@ const UsuarioDashboard = () => {
             </div>
             )}
             <div className="dashboard_containerimput error-message">{errorMessage}</div>
-            <Historico datosHistorico={datosHistoricos} />
+            <Historico  datosHistorico={datosHistoricos} />
         </div>
     );
 };
