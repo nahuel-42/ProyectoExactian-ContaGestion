@@ -8,7 +8,7 @@ const UsuarioDashboard = () => {
     const [fechaInicial, setfechaInicial] = useState('');
     const [horaInicial, sethoraInicial] = useState('12:00');
     const [opciones, setOpciones] = useState([]);
-    const [idEmpleado, setIdEmpleado] = useState('');
+    const [idEmpleado, setIdEmpleado] = useState('default');
     const [errorMessage, setErrorMessage] = useState('');
     const [datosHistoricos, setDatosHistoricos] = useState([]);
     const [horaTranscurrida, setHoraTranscurrida] = useState('');
@@ -30,7 +30,6 @@ const UsuarioDashboard = () => {
     useEffect(() => {
         const cargarOpciones = async () => {
             try {
-
                 const respuesta = await httpClient.get('/empleados/listar');
                 setOpciones(respuesta);
             } catch (error) {
@@ -67,60 +66,82 @@ const UsuarioDashboard = () => {
     function handleEmpleadoChange(e) {
         console.log('Empleado seleccionado:', e.target.value);
         setIdEmpleado(e.target.value);
+        limpiarMensajeError();
         setMostrarHoraTranscurrida(false);
     }
+
+    const esValidoEmpleado = () => {
+        console.log('Empleado seleccionado:', idEmpleado);
+        if (idEmpleado == 'default') {
+            setErrorMessage('Debe seleccionar un empleado');
+            console.log('Debe seleccionar un empleado');
+            return false;
+        }
+        return true;
+    }
+
+    const limpiarMensajeError = () => {
+        
+        setErrorMessage('');
+    };
 
     const registrarIngreso = async (event) => {
         event.preventDefault();
         setErrorMessage('');
         setMostrarHoraTranscurrida(false);
-        try {
-            const fechaHora = `${fechaInicial}T${horaInicial}:00`;
-            console.log('Fecha y hora:', fechaHora);
-            const body = {
-                fecha: fechaHora,
-                idEmpleado: idEmpleado
-            };
-            const response = await httpClient.post('/asistencia/registrarIngreso', { data: body });
-            if (response.success) {
-                console.log(response.message);
-                cargarHistorico();
-            } else {
-                setErrorMessage(response.message);
-            }
-        } catch (error) {
-            if (error.response.status === 403) {
-                navigate('/login');
-            } else {
-                errorMsg = error.response.data || 'Error en el servidor';
+        if (esValidoEmpleado()) {
+            try {
+                const fechaHora = `${fechaInicial}T${horaInicial}:00`;
+                console.log('Fecha y hora:', fechaHora);
+                const body = {
+                    fecha: fechaHora,
+                    idEmpleado: idEmpleado
+                };
+                const response = await httpClient.post('/asistencia/registrarIngreso', { data: body });
+                if (response.success) {
+                    console.log(response.message);
+                    cargarHistorico();
+                    setErrorMessage(response.message);
+                } else {
+                    setErrorMessage(response.message);
+                }
+            } catch (error) {
+                if (error.response.status === 403) {
+                    navigate('/login');
+                } else {
+                    errorMsg = error.response.data || 'Error en el servidor';
+                }
             }
         }
     };
 
     const registrarEgreso = async (event) => {
         event.preventDefault();
-        setErrorMessage('');
-        try {
-            const fechaHora = `${fechaInicial}T${horaInicial}:00`;
-            const body = {
-                fecha: fechaHora,
-                idEmpleado: idEmpleado
-            };
-            const response = await httpClient.post('/asistencia/registrarEgreso', { data: body });
-            if (response.success) {
-                console.log(response.message);
-                cargarHistorico();
-                setHoraTranscurrida(response.horaTranscurrida);
-                setMostrarHoraTranscurrida(true);
+        limpiarMensajeError();
+        if (esValidoEmpleado()) {
+            try {
+                const fechaHora = `${fechaInicial}T${horaInicial}:00`;
+                const body = {
+                    fecha: fechaHora,
+                    idEmpleado: idEmpleado
+                };
+                const response = await httpClient.post('/asistencia/registrarEgreso', { data: body });
+                if (response.success) {
+                    console.log(response.message);
+                    cargarHistorico();
+                    setHoraTranscurrida(response.horaTranscurrida);
+                    setMostrarHoraTranscurrida(true);
+                    setErrorMessage(response.message);
 
-            } else {
-                setErrorMessage(response.message);
-            }
-        } catch (error) {
-            if (error.response.status === 403) {
-                navigate('/login');
-            } else {
-                errorMsg = error.response.data || 'Error en el servidor';
+                } else {
+                    setErrorMessage(response.message);
+                }
+            } catch (error) {
+                if (error.response.status === 403) {
+                    navigate('/login');
+                } else {
+                    errorMsg = error.response.data || 'Error en el servidor';
+                }
             }
         }
     };
@@ -136,6 +157,7 @@ const UsuarioDashboard = () => {
                 <label htmlFor="opciones">Opciones:</label>
                 <select className='select_empleados' id="opciones" name="opciones" value={idEmpleado}
                     onChange={handleEmpleadoChange}>
+                    <option value="">Seleccione el empleado</option>
 
                     {opciones.map((opcion) => (
                         <option key={opcion.id_empleado} value={opcion.id_empleado}>

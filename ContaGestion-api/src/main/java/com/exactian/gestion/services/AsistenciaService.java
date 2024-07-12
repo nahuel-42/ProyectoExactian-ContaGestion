@@ -67,6 +67,15 @@ public class AsistenciaService {
 			return new EgresoResponseDTO(false, MensajesRespuesta.EMPLEADO_NO_ESTA_DENTRO.toString(),null);
 		}
 		
+		long diferencia = request.getFecha().getTime() - empleado.getEstado().getHora_ult_ingreso().getTime();
+		
+		if (diferencia < 0) {
+			return new EgresoResponseDTO(false, MensajesRespuesta.HORA_EGRESO_MENOR.toString(),null);
+		}
+		else if (diferencia == 0) {
+			return new EgresoResponseDTO(false, MensajesRespuesta.HORA_EGRESO_IGUAL.toString(),null);
+		}
+		
 		empleado.getEstado().setDentro_compania(false);
 		empleado.getEstado().setHora_ult_egreso(request.getFecha());
 		empleadoRepository.save(empleado);
@@ -78,8 +87,7 @@ public class AsistenciaService {
         acceso.setHora_registro(request.getFecha());
         accesoRepository.save(acceso);
 
-		long diferencia = empleado.getEstado().getHora_ult_egreso().getTime() - empleado.getEstado().getHora_ult_ingreso().getTime();
-		
+
 		return new EgresoResponseDTO(true, MensajesRespuesta.EGRESO_REGISTRADO_CORRECTAMENTE.toString(), diferencia);
 	}
 
